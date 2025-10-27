@@ -70,26 +70,60 @@ export const verificationsTable = pgTable("verifications", {
     .notNull(),
 });
 
-export const videosTable = pgTable(
-  "videos",
-  {
-    id: uuid("id").primaryKey().defaultRandom(),
-    name: text("name").notNull(),
-    type: text("type").notNull(),
-    driveFileId: text("drive_file_id"),
-    mimeType: text("mime_type"),
-    parentId: uuid("parent_id"),
-    pathSlug: text("path_slug").notNull().unique(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().notNull(),
-  },
-  (table) => ({
-    parentFk: foreignKey({
-      columns: [table.parentId],
-      foreignColumns: [table.id],
-    }).onDelete("cascade"),
-  })
-);
+// Tabela de Áreas (FrontEnd, BackEnd, Carreira)
+export const areasTable = pgTable("areas", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull().unique(),
+  driveFileId: text("drive_file_id"),
+  pathSlug: text("path_slug").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Tabela de Cursos (Acessibilidade com React, SEO para Devs, etc.)
+export const coursesTable = pgTable("courses", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  areaId: uuid("area_id")
+    .notNull()
+    .references(() => areasTable.id, { onDelete: "cascade" }),
+  driveFileId: text("drive_file_id"),
+  pathSlug: text("path_slug").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Tabela de Módulos (01 - Navegando pelo SEO, 02 - Crawling and Indexing, etc.)
+export const modulesTable = pgTable("modules", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  courseId: uuid("course_id")
+    .notNull()
+    .references(() => coursesTable.id, { onDelete: "cascade" }),
+  driveFileId: text("drive_file_id"),
+  pathSlug: text("path_slug").notNull().unique(),
+  order: integer("order").default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// Tabela de Vídeos (aulas individuais)
+export const videosTable = pgTable("videos", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  type: text("type").notNull(),
+  driveFileId: text("drive_file_id"),
+  mimeType: text("mime_type"),
+  moduleId: uuid("module_id")
+    .references(() => modulesTable.id, { onDelete: "cascade" }),
+  courseId: uuid("course_id")
+    .references(() => coursesTable.id, { onDelete: "cascade" }),
+  pathSlug: text("path_slug").notNull().unique(),
+  order: integer("order").default(0),
+  duration: integer("duration"), // duração em segundos
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
 
 export const videosProgressTable = pgTable("video_progress", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -102,12 +136,40 @@ export const videosProgressTable = pgTable("video_progress", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-export const videosRelations = relations(videosTable, ({ one, many }) => ({
-  parent: one(videosTable, {
-    fields: [videosTable.parentId],
-    references: [videosTable.id],
+// Relações das Áreas
+export const areasRelations = relations(areasTable, ({ many }) => ({
+  courses: many(coursesTable),
+}));
+
+// Relações dos Cursos
+export const coursesRelations = relations(coursesTable, ({ one, many }) => ({
+  area: one(areasTable, {
+    fields: [coursesTable.areaId],
+    references: [areasTable.id],
   }),
-  children: many(videosTable),
+  modules: many(modulesTable),
+  videos: many(videosTable), // vídeos diretos do curso (sem módulo)
+}));
+
+// Relações dos Módulos
+export const modulesRelations = relations(modulesTable, ({ one, many }) => ({
+  course: one(coursesTable, {
+    fields: [modulesTable.courseId],
+    references: [coursesTable.id],
+  }),
+  videos: many(videosTable),
+}));
+
+// Relações dos Vídeos
+export const videosRelations = relations(videosTable, ({ one, many }) => ({
+  module: one(modulesTable, {
+    fields: [videosTable.moduleId],
+    references: [modulesTable.id],
+  }),
+  course: one(coursesTable, {
+    fields: [videosTable.courseId],
+    references: [coursesTable.id],
+  }),
   progresses: many(videosProgressTable),
 }));
 
