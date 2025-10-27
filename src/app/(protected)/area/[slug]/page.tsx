@@ -1,12 +1,8 @@
 import { getCoursesByArea } from "@/actions/video-action";
 import { CoursesGrid } from "./_components/courses-grid";
+import { PageContainer } from "@/components/ui/page-container";
 import { notFound } from "next/navigation";
-
-interface AreaPageProps {
-  params: Promise<{
-    slug: string;
-  }>;
-}
+import type { AreaPageProps } from "@/types";
 
 const AreaPage = async ({ params }: AreaPageProps) => {
   const { slug } = await params;
@@ -19,22 +15,18 @@ const AreaPage = async ({ params }: AreaPageProps) => {
   const { area, courses } = result;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-3xl font-semibold text-gray-900 mb-2">
-            {area.name}
-          </h1>
-          <p className="text-gray-600">
+    <PageContainer>
+      <div className="space-y-8">
+        <div className="text-center">
+          <h1 className="text-3xl font-semibold mb-2">{area.name}</h1>
+          <p className="text-muted-foreground">
             Cursos disponíveis na área de {area.name.toLowerCase()}.
           </p>
         </div>
 
-        {/* Courses Grid Component */}
         <CoursesGrid courses={courses} />
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

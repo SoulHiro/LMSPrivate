@@ -1,31 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Calendar, FolderOpen } from "lucide-react";
-
-interface Video {
-  id: string;
-  name: string;
-  mimeType: string | null;
-  createdAt: Date;
-  course?: {
-    id: string;
-    name: string;
-    pathSlug: string;
-    area?: {
-      id: string;
-      name: string;
-      pathSlug: string;
-    };
-  } | null;
-  module?: {
-    id: string;
-    name: string;
-    pathSlug: string;
-  } | null;
-}
-
-interface VideoInfoProps {
-  video: Video;
-}
+import type { VideoInfoProps } from "@/types";
 
 export function VideoInfo({ video }: VideoInfoProps) {
   const formatDate = (date: Date) => {
@@ -38,8 +13,10 @@ export function VideoInfo({ video }: VideoInfoProps) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-semibold text-foreground">Informações do Vídeo</h2>
-      
+      <h2 className="text-xl font-semibold text-foreground">
+        Informações do Vídeo
+      </h2>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
           <p className="text-sm text-muted-foreground mb-1">Tipo de arquivo</p>

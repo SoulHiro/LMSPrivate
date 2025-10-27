@@ -1,35 +1,9 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { PlayCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-
-interface Video {
-  id: string;
-  name: string;
-  order?: number | null;
-  module?: {
-    id: string;
-    name: string;
-    pathSlug: string;
-  } | null;
-}
-
-interface CourseData {
-  course: any;
-  videos: Video[];
-  modules: Array<{
-    id: string;
-    name: string;
-    pathSlug: string;
-    videos: Video[];
-  }>;
-}
-
-interface VideoLessonsListProps {
-  courseData: CourseData | null;
-  currentVideoId: string;
-}
+import type { VideoLessonsListProps, Video } from "@/types";
 
 export function VideoLessonsList({
   courseData,

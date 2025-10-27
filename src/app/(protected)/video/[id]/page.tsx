@@ -2,12 +2,7 @@ import { getVideo, getCourseVideos } from "@/actions/video-action";
 import { VideoPlayerClient } from "./_components/video-player-client";
 import { notFound } from "next/navigation";
 import { PageContainer } from "@/components/ui/page-container";
-
-interface VideoPageProps {
-  params: Promise<{
-    id: string;
-  }>;
-}
+import type { VideoPageProps } from "@/types";
 
 const VideoPage = async ({ params }: VideoPageProps) => {
   const { id } = await params;

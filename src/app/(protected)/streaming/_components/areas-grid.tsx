@@ -1,36 +1,9 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { FolderOpen, Calendar, BookOpen } from "lucide-react";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { FolderOpen, BookOpen } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-interface Area {
-  id: string;
-  name: string;
-  slug: string;
-  createdAt: Date;
-  updatedAt: Date;
-  driveFileId: string | null;
-  pathSlug: string;
-  courses?: { 
-    id: string; 
-    name: string;
-    createdAt: Date;
-    updatedAt: Date;
-    driveFileId: string | null;
-    pathSlug: string;
-    areaId: string;
-  }[];
-}
-
-interface AreasGridProps {
-  areas: Area[];
-}
+import type { AreasGridProps } from "@/types";
 
 export function AreasGrid({ areas }: AreasGridProps) {
   const router = useRouter();
@@ -40,10 +13,10 @@ export function AreasGrid({ areas }: AreasGridProps) {
   };
 
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
     }).format(new Date(date));
   };
 
@@ -54,31 +27,24 @@ export function AreasGrid({ areas }: AreasGridProps) {
         {areas.map((area) => (
           <Card
             key={area.id}
-            onClick={() => handleAreaClick(area.slug)}
-            className="group cursor-pointer border border-gray-200 bg-white hover:border-gray-300 hover:shadow-md transition-all duration-200 ease-in-out"
+            onClick={() => handleAreaClick(area.slug!)}
+            className="group cursor-pointer"
           >
-            <CardHeader className="pb-4">
-              <div className="flex items-start justify-between mb-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <FolderOpen className="h-5 w-5 text-blue-600" />
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="p-2 rounded-lg text-primary border border-primary">
+                  <FolderOpen className="h-5 w-5 " />
                 </div>
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full flex items-center gap-1">
+                <span className="text-xs px-2 py-1 rounded-full flex items-center gap-1">
                   <BookOpen className="h-3 w-3" />
                   {area.courses?.length || 0} cursos
                 </span>
               </div>
 
-              <CardTitle className="text-lg font-medium text-gray-900 group-hover:text-gray-700 transition-colors line-clamp-2">
+              <CardTitle className="text-lg font-medium  transition-colors line-clamp-2">
                 {area.name}
               </CardTitle>
             </CardHeader>
-
-            <CardContent className="pt-0">
-              <div className="flex items-center gap-2 text-sm text-gray-500">
-                <Calendar className="h-3 w-3" />
-                <span>{formatDate(area.createdAt)}</span>
-              </div>
-            </CardContent>
           </Card>
         ))}
       </div>
@@ -93,7 +59,8 @@ export function AreasGrid({ areas }: AreasGridProps) {
             Nenhuma área encontrada
           </h3>
           <p className="text-gray-500 max-w-md mx-auto">
-            Não há áreas de conhecimento disponíveis no momento. Verifique novamente mais tarde.
+            Não há áreas de conhecimento disponíveis no momento. Verifique
+            novamente mais tarde.
           </p>
         </div>
       )}

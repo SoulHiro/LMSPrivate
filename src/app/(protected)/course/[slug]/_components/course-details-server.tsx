@@ -1,50 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { FolderOpen, Calendar, FileVideo } from "lucide-react";
 import { CourseDetailsClient } from "./course-details-client";
-
-interface Video {
-  id: string;
-  name: string;
-  type: string;
-  createdAt: Date;
-  mimeType?: string | null;
-}
-
-interface Module {
-  id: string;
-  name: string;
-  createdAt: Date;
-  videos: Video[];
-}
-
-interface Course {
-  id: string;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-  driveFileId: string | null;
-  pathSlug: string;
-  areaId: string;
-  area?: {
-    id: string;
-    name: string;
-    createdAt: Date;
-    updatedAt: Date;
-    driveFileId: string | null;
-    pathSlug: string;
-  };
-}
-
-interface CourseData {
-  course: Course | null;
-  videos: Video[];
-  modules: Module[];
-}
-
-interface CourseDetailsServerProps {
-  courseData: CourseData;
-}
+import { Separator } from "@/components/ui/separator";
+import type { CourseDetailsServerProps } from "@/types";
 
 const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat("pt-BR", {
@@ -52,15 +10,6 @@ const formatDate = (date: Date) => {
     month: "2-digit",
     year: "numeric",
   }).format(new Date(date));
-};
-
-const getTotalVideos = (courseData: CourseData) => {
-  const directVideos = courseData.videos.length;
-  const moduleVideos = courseData.modules.reduce(
-    (total, module) => total + module.videos.length,
-    0
-  );
-  return directVideos + moduleVideos;
 };
 
 export function CourseDetailsServer({ courseData }: CourseDetailsServerProps) {
@@ -83,55 +32,38 @@ export function CourseDetailsServer({ courseData }: CourseDetailsServerProps) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
-      <CourseDetailsClient courseData={courseData} />
-      
-      <div className="mb-8">
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-3xl font-semibold text-gray-900 mb-2">
-              {courseData.course.name}
-            </h1>
-            <div className="flex items-center gap-4 text-sm text-gray-600">
-              <div className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                <span>Criado em {formatDate(courseData.course.createdAt)}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <FileVideo className="h-4 w-4" />
-                <span>{getTotalVideos(courseData)} vídeos</span>
-              </div>
-            </div>
-          </div>
-          <Badge variant="secondary" className="text-sm">
-            {courseData.course.area?.name || "Curso"}
-          </Badge>
-        </div>
+    <div>
+      <CourseDetailsClient />
+
+      <div className="flex items-start justify-between">
+        <h1 className="text-3xl font-semibold">{courseData.course.name}</h1>
+        <span className="text-3xl font-semibold">Módulos do Curso</span>
       </div>
 
+      <Separator className="my-4" />
       {courseData.videos.length > 0 && (
-        <div className="mb-12">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
-            Vídeos do Curso
-          </h2>
+        <div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {courseData.videos.map((video) => (
               <Card
                 key={video.id}
                 data-video-card
                 data-video-id={video.id}
-                className="border border-gray-200 bg-white"
+                className="border border-border"
               >
-                <CardHeader className="pb-4">
+                <CardHeader>
                   <div className="flex items-start justify-between mb-3">
-                    <div className="p-2 bg-gray-100 rounded-lg">
-                      <FileVideo className="h-5 w-5 text-gray-600" />
+                    <div className="p-2 rounded-lg">
+                      <FileVideo className="h-5 w-5 " />
                     </div>
-                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                    <span className="text-xs  px-2 py-1 rounded-full">
                       {video.mimeType || "video"}
                     </span>
                   </div>
-                  <CardTitle className="text-sm font-medium text-gray-900 line-clamp-2" data-video-title>
+                  <CardTitle
+                    className="text-sm font-medium text-gray-900 line-clamp-2"
+                    data-video-title
+                  >
                     {video.name}
                   </CardTitle>
                 </CardHeader>
@@ -149,9 +81,6 @@ export function CourseDetailsServer({ courseData }: CourseDetailsServerProps) {
 
       {courseData.modules.length > 0 && (
         <div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">
-            Módulos do Curso
-          </h2>
           <div className="space-y-8">
             {courseData.modules.map((module) => (
               <Card key={module.id} className="border border-gray-200 bg-white">
@@ -187,7 +116,10 @@ export function CourseDetailsServer({ courseData }: CourseDetailsServerProps) {
                               <FileVideo className="h-4 w-4 text-gray-600" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-sm font-medium text-gray-900 line-clamp-2" data-module-video-title>
+                              <p
+                                className="text-sm font-medium text-gray-900 line-clamp-2"
+                                data-module-video-title
+                              >
                                 {video.name}
                               </p>
                               <div className="flex items-center gap-2 mt-2 text-xs text-gray-500">

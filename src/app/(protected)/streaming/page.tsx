@@ -1,27 +1,27 @@
 import { getAreas } from "@/actions/video-action";
 import { AreasGrid } from "./_components/areas-grid";
+import { PageContainer } from "@/components/ui/page-container";
+import { NavigationBreadcrumb, createSimpleBreadcrumbs } from "@/components/navigation-breadcrumb";
 
 const StreamingPage = async () => {
   const areas = await getAreas();
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        {/* Header */}
-        <div className="mb-12 flex flex-col text-center">
-          <h1 className="text-3xl font-semibold text-gray-900 mb-2">
-            Áreas de Conhecimento
-          </h1>
-          <p className="text-gray-600">
-            Explore nossas áreas de conhecimento e descubra os cursos
-            disponíveis em cada uma.
-          </p>
-        </div>
+  const breadcrumbItems = createSimpleBreadcrumbs("Áreas de Conhecimento");
 
-        {/* Areas Grid Component */}
-        <AreasGrid areas={areas} />
+  return (
+    <PageContainer className="space-y-8">
+      <NavigationBreadcrumb items={breadcrumbItems} />
+      
+      <div className="flex flex-col text-center">
+        <h1>Áreas de Conhecimento</h1>
+        <span className="text-muted-foreground">
+          Explore nossas áreas de conhecimento e descubra os cursos disponíveis
+          em cada uma.
+        </span>
       </div>
-    </div>
+
+      <AreasGrid areas={areas} />
+    </PageContainer>
   );
 };
 

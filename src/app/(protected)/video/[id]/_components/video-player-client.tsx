@@ -3,56 +3,10 @@
 import { ArrowLeft, PlayCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbPage,
-} from "@/components/ui/breadcrumb";
+import { NavigationBreadcrumb, createVideoBreadcrumbs } from "@/components/navigation-breadcrumb";
 import { VideoInfo } from "./video-info";
 import { VideoLessonsList } from "./video-lessons-list";
-
-interface Video {
-  id: string;
-  name: string;
-  driveFileId: string | null;
-  mimeType: string | null;
-  createdAt: Date;
-  order?: number | null;
-  course?: {
-    id: string;
-    name: string;
-    pathSlug: string;
-    area?: {
-      id: string;
-      name: string;
-      pathSlug: string;
-    };
-  } | null;
-  module?: {
-    id: string;
-    name: string;
-    pathSlug: string;
-  } | null;
-}
-
-interface CourseData {
-  course: any;
-  videos: Video[];
-  modules: Array<{
-    id: string;
-    name: string;
-    pathSlug: string;
-    videos: Video[];
-  }>;
-}
-
-interface VideoPlayerClientProps {
-  video: Video;
-  courseData: CourseData | null;
-}
+import type { VideoPlayerClientProps } from "@/types";
 
 export function VideoPlayerClient({
   video,
@@ -72,6 +26,8 @@ export function VideoPlayerClient({
     ? `https://drive.google.com/file/d/${video.driveFileId}/preview`
     : null;
 
+  const breadcrumbItems = createVideoBreadcrumbs(video);
+
   return (
     <div className="space-y-8">
       <div className="space-y-7">
@@ -80,43 +36,7 @@ export function VideoPlayerClient({
           {video.course ? `Voltar ao curso` : "Voltar"}
         </Button>
 
-        <Breadcrumb className="mb-4">
-          <BreadcrumbList>
-            {video.course?.area && (
-              <>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href={`/area/${video.course.area.pathSlug}`}>
-                    {video.course.area.name}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-              </>
-            )}
-            {video.course && (
-              <>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href={`/course/${video.course.pathSlug}`}>
-                    {video.course.name}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-              </>
-            )}
-            {video.module && (
-              <>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href={`/module/${video.module.pathSlug}`}>
-                    {video.module.name}
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-              </>
-            )}
-            <BreadcrumbItem>
-              <BreadcrumbPage>{video.name}</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        <NavigationBreadcrumb items={breadcrumbItems} className="mb-4" />
 
         <h1 className="text-3xl font-semibold text-foreground mb-2">
           {video.name}

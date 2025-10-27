@@ -1,84 +1,51 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { FolderOpen, Calendar, PlayCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { CoursesGridProps } from "@/types";
+import { Calendar, FolderOpen, PlayCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-interface Course {
-  id: string;
-  name: string;
-  slug: string;
-  description?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  driveFileId: string | null;
-  pathSlug: string;
-  areaId: string;
-  area?: {
-    id: string;
-    name: string;
-  };
-}
-
-interface CoursesGridProps {
-  courses: Course[];
-}
 
 export function CoursesGrid({ courses }: CoursesGridProps) {
   const router = useRouter();
 
   const handleCourseClick = (courseSlug: string) => {
-    // Usar o pathSlug se disponível, senão usar o slug gerado
-    const slug = courseSlug.startsWith('/') ? courseSlug.slice(1) : courseSlug;
+    const slug = courseSlug.startsWith("/") ? courseSlug.slice(1) : courseSlug;
     router.push(`/course/${slug}`);
   };
 
   const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
     }).format(new Date(date));
   };
 
   return (
     <>
-      {/* Courses Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {courses.map((course) => (
           <Card
             key={course.id}
-            onClick={() => handleCourseClick(course.slug)}
-            className="group cursor-pointer border border-gray-200 bg-white hover:border-gray-300 hover:shadow-md transition-all duration-200 ease-in-out"
+            onClick={() => handleCourseClick(course.slug!)}
+            className="group cursor-pointer gap-0"
           >
             <CardHeader className="pb-4">
               <div className="flex items-start justify-between mb-3">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <PlayCircle className="h-5 w-5 text-green-600" />
+                <div className="p-2 text-primary border border-primary rounded-lg">
+                  <PlayCircle className="h-5 w-5" />
                 </div>
-                <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                  Curso
-                </span>
+                <Badge>Curso</Badge>
               </div>
 
-              <CardTitle className="text-lg font-medium text-gray-900 group-hover:text-gray-700 transition-colors line-clamp-2">
+              <CardTitle className="text-lg font-medium line-clamp-2">
                 {course.name}
               </CardTitle>
             </CardHeader>
 
-            <CardContent className="pt-0">
-              {course.description && (
-                <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                  {course.description}
-                </p>
-              )}
-              
-              <div className="flex items-center gap-2 text-sm text-gray-500">
+            <CardContent>
+              <div className="flex items-center gap-2 text-sm">
                 <Calendar className="h-4 w-4" />
                 <span>Criado em {formatDate(course.createdAt)}</span>
               </div>
