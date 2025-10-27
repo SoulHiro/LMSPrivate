@@ -7,7 +7,14 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["**", "!node_modules", "!.next", "!dist", "!build"]
+    "includes": [
+      "**",
+      "!node_modules",
+      "!.next",
+      "!dist",
+      "!build",
+      "!src/components/ui"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -18,13 +25,29 @@
     "enabled": true,
     "rules": {
       "recommended": true,
+      "security": {
+        "noDangerouslySetInnerHtml": "error",
+        "noDangerouslySetInnerHtmlWithChildren": "error"
+      },
+      "style": {
+        "useImportType": "error"
+      },
       "suspicious": {
-        "noUnknownAtRules": "off"
+        "noUnknownAtRules": "off",
+        "useBiomeIgnoreFolder": "error"
+      },
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error"
+      },
+      "nursery": {
+        "noImportCycles": "error"
       }
     },
     "domains": {
       "next": "recommended",
-      "react": "recommended"
+      "react": "recommended",
+      "project": "recommended"
     }
   },
   "assist": {
