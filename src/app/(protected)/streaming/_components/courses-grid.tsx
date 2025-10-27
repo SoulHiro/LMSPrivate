@@ -23,7 +23,6 @@ export function CoursesGrid({ courses }: CoursesGridProps) {
 
   return (
     <>
-      {/* Courses Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {courses.map((course) => (
           <Card
@@ -56,7 +55,6 @@ export function CoursesGrid({ courses }: CoursesGridProps) {
         ))}
       </div>
 
-      {/* Empty State */}
       {courses.length === 0 && (
         <div className="text-center py-20">
           <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">

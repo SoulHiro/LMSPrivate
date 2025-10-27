@@ -12,17 +12,8 @@ export function AreasGrid({ areas }: AreasGridProps) {
     router.push(`/area/${areaSlug}`);
   };
 
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("pt-BR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    }).format(new Date(date));
-  };
-
   return (
     <>
-      {/* Areas Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {areas.map((area) => (
           <Card
@@ -49,7 +40,6 @@ export function AreasGrid({ areas }: AreasGridProps) {
         ))}
       </div>
 
-      {/* Empty State */}
       {areas.length === 0 && (
         <div className="text-center py-20">
           <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">

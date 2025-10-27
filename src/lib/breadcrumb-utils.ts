@@ -1,4 +1,3 @@
-// Utilitários para breadcrumbs que podem ser usados em Server Components
 import type { BreadcrumbItem } from "@/types";
 
 export function createSimpleBreadcrumbs(label: string): BreadcrumbItem[] {

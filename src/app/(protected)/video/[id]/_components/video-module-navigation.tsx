@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo } from "react";
 import {
   findCurrentVideoModule,
   findAdjacentModules,
@@ -18,13 +17,9 @@ export function VideoModuleNavigation({
 }: VideoModuleNavigationProps) {
   const router = useRouter();
 
-  const currentVideoModule = useMemo(() => {
-    return findCurrentVideoModule(courseData, currentVideoId);
-  }, [courseData, currentVideoId]);
+  const currentVideoModule = findCurrentVideoModule(courseData, currentVideoId);
 
-  const { previousModule, nextModule } = useMemo(() => {
-    return findAdjacentModules(courseData, currentVideoModule);
-  }, [courseData, currentVideoModule]);
+  const { previousModule, nextModule } = findAdjacentModules(courseData, currentVideoModule);
 
   const handlePreviousModule = () => {
     if (previousModule) {
@@ -44,7 +39,6 @@ export function VideoModuleNavigation({
     }
   };
 
-  // Não mostrar navegação se não há módulos adjacentes
   if (!previousModule && !nextModule) {
     return null;
   }

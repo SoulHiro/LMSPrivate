@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Calendar, FolderOpen } from "lucide-react";
 import type { VideoInfoProps } from "@/types";
 

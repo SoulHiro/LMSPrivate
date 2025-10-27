@@ -6,7 +6,6 @@ import {
   boolean,
   numeric,
   uuid,
-  foreignKey,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -70,7 +69,6 @@ export const verificationsTable = pgTable("verifications", {
     .notNull(),
 });
 
-// Tabela de Áreas (FrontEnd, BackEnd, Carreira)
 export const areasTable = pgTable("areas", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull().unique(),
@@ -80,7 +78,6 @@ export const areasTable = pgTable("areas", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-// Tabela de Cursos (Acessibilidade com React, SEO para Devs, etc.)
 export const coursesTable = pgTable("courses", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
@@ -93,7 +90,6 @@ export const coursesTable = pgTable("courses", {
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
-// Tabela de Módulos (01 - Navegando pelo SEO, 02 - Crawling and Indexing, etc.)
 export const modulesTable = pgTable("modules", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: text("name").notNull(),
@@ -114,10 +110,12 @@ export const videosTable = pgTable("videos", {
   type: text("type").notNull(),
   driveFileId: text("drive_file_id"),
   mimeType: text("mime_type"),
-  moduleId: uuid("module_id")
-    .references(() => modulesTable.id, { onDelete: "cascade" }),
-  courseId: uuid("course_id")
-    .references(() => coursesTable.id, { onDelete: "cascade" }),
+  moduleId: uuid("module_id").references(() => modulesTable.id, {
+    onDelete: "cascade",
+  }),
+  courseId: uuid("course_id").references(() => coursesTable.id, {
+    onDelete: "cascade",
+  }),
   pathSlug: text("path_slug").notNull().unique(),
   order: integer("order").default(0),
   duration: integer("duration"), // duração em segundos
@@ -141,17 +139,15 @@ export const areasRelations = relations(areasTable, ({ many }) => ({
   courses: many(coursesTable),
 }));
 
-// Relações dos Cursos
 export const coursesRelations = relations(coursesTable, ({ one, many }) => ({
   area: one(areasTable, {
     fields: [coursesTable.areaId],
     references: [areasTable.id],
   }),
   modules: many(modulesTable),
-  videos: many(videosTable), // vídeos diretos do curso (sem módulo)
+  videos: many(videosTable),
 }));
 
-// Relações dos Módulos
 export const modulesRelations = relations(modulesTable, ({ one, many }) => ({
   course: one(coursesTable, {
     fields: [modulesTable.courseId],
@@ -160,7 +156,6 @@ export const modulesRelations = relations(modulesTable, ({ one, many }) => ({
   videos: many(videosTable),
 }));
 
-// Relações dos Vídeos
 export const videosRelations = relations(videosTable, ({ one, many }) => ({
   module: one(modulesTable, {
     fields: [videosTable.moduleId],

@@ -41,7 +41,6 @@ export function NavigationBreadcrumb({
   );
 }
 
-// Helper function para criar breadcrumbs de vídeo
 export function createVideoBreadcrumbs(video: {
   name: string;
   course?: {
@@ -92,7 +91,6 @@ export function createVideoBreadcrumbs(video: {
   return items;
 }
 
-// Helper function para criar breadcrumbs de curso
 export function createCourseBreadcrumbs(course: {
   name: string;
   pathSlug: string;
@@ -120,7 +118,6 @@ export function createCourseBreadcrumbs(course: {
   return items;
 }
 
-// Helper function para criar breadcrumbs de área
 export function createAreaBreadcrumbs(area: {
   name: string;
   pathSlug: string;
@@ -137,7 +134,6 @@ export function createAreaBreadcrumbs(area: {
   ];
 }
 
-// Helper function para criar breadcrumbs simples
 export function createSimpleBreadcrumbs(label: string): BreadcrumbItemType[] {
   return [
     {

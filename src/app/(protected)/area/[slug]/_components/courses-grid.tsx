@@ -54,7 +54,6 @@ export function CoursesGrid({ courses }: CoursesGridProps) {
         ))}
       </div>
 
-      {/* Empty State */}
       {courses.length === 0 && (
         <div className="text-center py-20">
           <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">

@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { PlayCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useMemo } from "react";
 import { findCurrentVideoModule } from "@/lib/video-utils";
 import type { VideoLessonsListProps } from "@/types";
 
@@ -12,16 +11,12 @@ export function VideoLessonsList({
   currentVideoId,
 }: VideoLessonsListProps) {
   const router = useRouter();
-  const [openModules, setOpenModules] = useState<Set<string>>(new Set());
 
   const handleVideoClick = (videoId: string) => {
     router.push(`/video/${videoId}`);
   };
 
-  // Usar função utilitária para encontrar o módulo atual
-  const currentVideoModule = useMemo(() => {
-    return findCurrentVideoModule(courseData, currentVideoId);
-  }, [courseData, currentVideoId]);
+  const currentVideoModule = findCurrentVideoModule(courseData, currentVideoId);
 
   if (!courseData) {
     return (
@@ -45,7 +40,6 @@ export function VideoLessonsList({
       </h2>
 
       <div className="space-y-3 max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
-        {/* Se o vídeo atual é avulso, mostrar todos os vídeos avulsos */}
         {!currentVideoModule && courseData.videos.length > 0 && (
           <div className="space-y-2">
             <h3 className="text-sm font-medium text-muted-foreground px-2">
@@ -79,7 +73,6 @@ export function VideoLessonsList({
           </div>
         )}
 
-        {/* Se o vídeo atual está em um módulo, mostrar apenas as aulas desse módulo */}
         {currentVideoModule && (
           <div className="space-y-2">
             <div className="space-y-1">
@@ -112,7 +105,6 @@ export function VideoLessonsList({
           </div>
         )}
 
-        {/* Caso não tenha nenhuma aula no contexto atual */}
         {(!currentVideoModule && courseData.videos.length === 0) ||
         (currentVideoModule && currentVideoModule.videos.length === 0) ? (
           <div className="text-center py-8">
