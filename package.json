@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
-    "format": "biome format --write"
+    "format": "biome format --write",
+    "sync:drive": "tsx src/lib/drive-sync.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -26,6 +27,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.7",
+    "googleapis": "^164.1.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.548.0",
     "next": "16.0.0",
