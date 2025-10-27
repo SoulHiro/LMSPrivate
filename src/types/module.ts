@@ -5,6 +5,7 @@ export interface Module {
   name: string;
   pathSlug: string;
   createdAt: Date;
+  order?: number | null;
   videos: Array<{
     id: string;
     name: string;

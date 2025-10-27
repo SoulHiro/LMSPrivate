@@ -15,7 +15,7 @@ export function BackButton({ type = "back" }: BackButtonProps) {
     if (type === "back") {
       router.back();
     } else if (type === "home") {
-      router.push("/");
+      router.push("/streaming");
     }
   };
 

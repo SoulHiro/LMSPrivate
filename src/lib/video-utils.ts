@@ -1,12 +1,9 @@
 import type { VideoLessonsListProps } from "@/types";
 
-// Tipo para dados do curso
 type CourseData = VideoLessonsListProps["courseData"];
 
-// Tipo para módulo
 type Module = NonNullable<CourseData>["modules"][0];
 
-// Tipo para vídeo
 type Video = Module["videos"][0];
 
 /**
@@ -22,13 +19,13 @@ export function findCurrentVideoModule(
   if (!courseData) return null;
 
   for (const module of courseData.modules) {
-    const videoInModule = module.videos.find(video => video.id === videoId);
+    const videoInModule = module.videos.find((video) => video.id === videoId);
     if (videoInModule) {
       return module;
     }
   }
 
-  return null; // Vídeo é avulso (não está em nenhum módulo)
+  return null;
 }
 
 /**
@@ -56,22 +53,28 @@ export function sortVideosByOrder(videos: Video[]): Video[] {
  * @returns Objeto com módulo anterior e próximo
  */
 export function findAdjacentModules(
-  courseData: CourseData,
-  currentModule: Module
+  courseData: CourseData | null,
+  currentModule: Module | null
 ): { previousModule: Module | null; nextModule: Module | null } {
-  if (!courseData || courseData.modules.length === 0) {
+  if (!courseData || !currentModule || courseData.modules.length === 0) {
     return { previousModule: null, nextModule: null };
   }
 
   const sortedModules = sortModulesByOrder(courseData.modules);
-  const currentIndex = sortedModules.findIndex(m => m.id === currentModule.id);
+  const currentIndex = sortedModules.findIndex(
+    (m) => m.id === currentModule.id
+  );
 
   if (currentIndex === -1) {
     return { previousModule: null, nextModule: null };
   }
 
-  const previousModule = currentIndex > 0 ? sortedModules[currentIndex - 1] : null;
-  const nextModule = currentIndex < sortedModules.length - 1 ? sortedModules[currentIndex + 1] : null;
+  const previousModule =
+    currentIndex > 0 ? sortedModules[currentIndex - 1] : null;
+  const nextModule =
+    currentIndex < sortedModules.length - 1
+      ? sortedModules[currentIndex + 1]
+      : null;
 
   return { previousModule, nextModule };
 }
@@ -91,12 +94,15 @@ export function getVideoNavigationData(
   nextModule: Module | null;
 } {
   const currentModule = findCurrentVideoModule(courseData, currentVideoId);
-  
+
   if (!currentModule) {
     return { currentModule: null, previousModule: null, nextModule: null };
   }
 
-  const { previousModule, nextModule } = findAdjacentModules(courseData, currentModule);
+  const { previousModule, nextModule } = findAdjacentModules(
+    courseData,
+    currentModule
+  );
 
   return {
     currentModule,
@@ -112,7 +118,7 @@ export function getVideoNavigationData(
  */
 export function getFirstVideoFromModule(module: Module): Video | null {
   if (!module.videos.length) return null;
-  
+
   const sortedVideos = sortVideosByOrder(module.videos);
   return sortedVideos[0];
 }
@@ -124,7 +130,7 @@ export function getFirstVideoFromModule(module: Module): Video | null {
  */
 export function getLastVideoFromModule(module: Module): Video | null {
   if (!module.videos.length) return null;
-  
+
   const sortedVideos = sortVideosByOrder(module.videos);
   return sortedVideos[sortedVideos.length - 1];
 }
