@@ -19,9 +19,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={`${interFont.variable} antialiased`}>{children}</body>
     </html>
   );
 }
-

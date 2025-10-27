@@ -74,11 +74,10 @@
 
 @layer base {
   * {
-    border-color: var(--border);
+    @apply border-border outline-ring/50;
   }
   body {
-    background-color: var(--background);
-    color: var(--foreground);
+    @apply bg-background text-foreground;
   }
   h1 {
     @apply scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance;
@@ -96,8 +95,7 @@
     @apply leading-7;
   }
   .text-lead {
-    color: var(--muted-foreground);
-    @apply text-xl;
+    @apply text-muted-foreground text-xl;
   }
   .text-large {
     @apply text-lg font-semibold;
@@ -106,8 +104,6 @@
     @apply text-sm leading-none font-medium;
   }
   .text-muted {
-    color: var(--muted-foreground);
-    @apply text-sm;
+    @apply text-muted-foreground text-sm;
   }
 }
-
