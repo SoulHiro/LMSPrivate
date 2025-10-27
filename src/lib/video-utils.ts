@@ -1,8 +1,6 @@
-import type { VideoLessonsListProps } from "@/types";
+import type { VideoLessonsListProps, Module } from "@/types";
 
 type CourseData = VideoLessonsListProps["courseData"];
-
-type Module = NonNullable<CourseData>["modules"][0];
 
 type Video = Module["videos"][0];
 
