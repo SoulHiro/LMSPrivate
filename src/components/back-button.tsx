@@ -4,11 +4,19 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-export function CourseDetailsClient() {
+interface BackButtonProps {
+  type?: "back" | "home";
+}
+
+export function BackButton({ type = "back" }: BackButtonProps) {
   const router = useRouter();
 
   const handleBackClick = () => {
-    router.back();
+    if (type === "back") {
+      router.back();
+    } else if (type === "home") {
+      router.push("/");
+    }
   };
 
   return (

@@ -3,9 +3,13 @@
 import { ArrowLeft, PlayCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { NavigationBreadcrumb, createVideoBreadcrumbs } from "@/components/navigation-breadcrumb";
+import {
+  NavigationBreadcrumb,
+  createVideoBreadcrumbs,
+} from "@/components/navigation-breadcrumb";
 import { VideoInfo } from "./video-info";
 import { VideoLessonsList } from "./video-lessons-list";
+import { VideoModuleNavigation } from "./video-module-navigation";
 import type { VideoPlayerClientProps } from "@/types";
 
 export function VideoPlayerClient({
@@ -53,6 +57,7 @@ export function VideoPlayerClient({
                 height="100%"
                 allow="autoplay"
                 className="w-full h-full rounded-lg"
+                allowFullScreen
                 title={video.name}
               />
             ) : (
@@ -75,6 +80,10 @@ export function VideoPlayerClient({
 
         <div className="lg:col-span-1">
           <VideoLessonsList courseData={courseData} currentVideoId={video.id} />
+          <VideoModuleNavigation
+            courseData={courseData}
+            currentVideoId={video.id}
+          />
         </div>
       </div>
     </div>

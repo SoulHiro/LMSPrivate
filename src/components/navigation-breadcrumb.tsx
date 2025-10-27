@@ -8,9 +8,15 @@ import {
   BreadcrumbSeparator,
   BreadcrumbPage,
 } from "@/components/ui/breadcrumb";
-import type { BreadcrumbItem as BreadcrumbItemType, NavigationBreadcrumbProps } from "@/types";
+import type {
+  BreadcrumbItem as BreadcrumbItemType,
+  NavigationBreadcrumbProps,
+} from "@/types";
 
-export function NavigationBreadcrumb({ items, className }: NavigationBreadcrumbProps) {
+export function NavigationBreadcrumb({
+  items,
+  className,
+}: NavigationBreadcrumbProps) {
   if (!items || items.length === 0) {
     return null;
   }
@@ -24,9 +30,7 @@ export function NavigationBreadcrumb({ items, className }: NavigationBreadcrumbP
               {item.isCurrentPage || !item.href ? (
                 <BreadcrumbPage>{item.label}</BreadcrumbPage>
               ) : (
-                <BreadcrumbLink href={item.href}>
-                  {item.label}
-                </BreadcrumbLink>
+                <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
               )}
             </BreadcrumbItem>
             {index < items.length - 1 && <BreadcrumbSeparator />}

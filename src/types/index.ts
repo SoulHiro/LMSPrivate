@@ -10,6 +10,7 @@ export type { Module } from './module';
 export type {
   VideoPlayerClientProps,
   VideoLessonsListProps,
+  VideoModuleNavigationProps,
   VideoInfoProps,
   VideoPageProps,
   BreadcrumbItem,

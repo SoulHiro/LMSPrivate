@@ -3,6 +3,7 @@ import { CoursesGrid } from "./_components/courses-grid";
 import { PageContainer } from "@/components/ui/page-container";
 import { notFound } from "next/navigation";
 import type { AreaPageProps } from "@/types";
+import { BackButton } from "@/components/back-button";
 
 const AreaPage = async ({ params }: AreaPageProps) => {
   const { slug } = await params;
@@ -16,6 +17,7 @@ const AreaPage = async ({ params }: AreaPageProps) => {
 
   return (
     <PageContainer>
+      <BackButton type="home" />
       <div className="space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-semibold mb-2">{area.name}</h1>

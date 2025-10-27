@@ -14,6 +14,11 @@ export interface VideoLessonsListProps {
   currentVideoId: string;
 }
 
+export interface VideoModuleNavigationProps {
+  courseData: CourseData | null;
+  currentVideoId: string;
+}
+
 export interface VideoInfoProps {
   video: VideoInfo;
 }
