@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Toaster } from "@/components/ui/sonner";
 import { authClient } from "@/lib/auth-client";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
@@ -30,7 +29,6 @@ const loginSchema = z.object({
 type LoginSchema = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -38,13 +36,12 @@ export function LoginForm() {
   });
 
   const onSubmit = async (values: LoginSchema) => {
-    setIsLoading(true);
     try {
       const result = await authClient.signIn.email({
         email: values.email,
         password: values.password,
         rememberMe: true,
-        callbackURL: "/",
+        callbackURL: "/perfil",
       });
 
       if (result?.error) {
@@ -63,78 +60,76 @@ export function LoginForm() {
     } catch (error) {
       console.error("💥 Erro no login:", error);
       toast.error("Erro inesperado ao fazer login");
-    } finally {
-      setIsLoading(false);
     }
   };
 
+  const isLoading = form.formState.isSubmitting
   return (
-    <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>E-mail</FormLabel>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>E-mail</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="jhon.doe@exemplo.com"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Senha</FormLabel>
+              <div className="relative">
                 <FormControl>
                   <Input
-                    type="email"
-                    placeholder="jhon.doe@exemplo.com"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
                     {...field}
+                    className="pr-10"
                   />
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Senha</FormLabel>
-                <div className="relative">
-                  <FormControl>
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      {...field}
-                      className="pr-10"
-                    />
-                  </FormControl>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="absolute right-0 top-0 h-full px-3 py-2 cursor-pointer"
-                    onClick={() => setShowPassword(!showPassword)}
-                    disabled={isLoading}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <Button
-            type="submit"
-            className="w-full cursor-pointer"
-            disabled={isLoading}
-            variant={"outline"}
-          >
-            {isLoading ? "Entrando..." : "Entrar"}
-          </Button>
-        </form>
-      </Form>
-    </>
+        <Button
+          type="submit"
+          className="w-full cursor-pointer"
+          disabled={isLoading}
+          variant={"outline"}
+        >
+          {isLoading ? "Entrando..." : "Entrar"}
+        </Button>
+      </form>
+    </Form>
   );
 }
+

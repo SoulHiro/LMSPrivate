@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${interFont.variable} antialiased`}>
+      <body className={`${interFont.variable} antialiased`} cz-shortcut-listen="true">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
