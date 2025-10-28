@@ -42,9 +42,11 @@ export function VideoPlayerClient({
 
         <NavigationBreadcrumb items={breadcrumbItems} className="mb-4" />
 
-        <h1 className="text-3xl font-semibold text-foreground mb-2">
-          {video.name}
-        </h1>
+        <div className="flex flex-row justify-start w-full">
+          <h1 className="text-3xl font-semibold text-foreground mb-2">
+            {video.name}
+          </h1>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
