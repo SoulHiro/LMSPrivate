@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Toaster } from "@/components/ui/sonner";
 import { authClient } from "@/lib/auth-client";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
@@ -30,7 +29,6 @@ const loginSchema = z.object({
 type LoginSchema = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -38,7 +36,6 @@ export function LoginForm() {
   });
 
   const onSubmit = async (values: LoginSchema) => {
-    setIsLoading(true);
     try {
       const result = await authClient.signIn.email({
         email: values.email,
@@ -63,10 +60,10 @@ export function LoginForm() {
     } catch (error) {
       console.error("💥 Erro no login:", error);
       toast.error("Erro inesperado ao fazer login");
-    } finally {
-      setIsLoading(false);
     }
   };
+
+  const isLoading = form.formState.isSubmitting;
 
   return (
     <>
